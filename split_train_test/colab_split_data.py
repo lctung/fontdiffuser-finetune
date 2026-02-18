@@ -70,7 +70,7 @@ for char in selected_chars:
 
 print("檔案複製與重新命名完成！")
 
-final_target = "/content/Fontdiffuser_Finetune/data_examples/train"
+final_target = "/content/fontdiffuser-finetune/data_examples/train"
 if os.path.exists(final_target):
     shutil.rmtree(final_target)
 shutil.copytree("train", final_target)
