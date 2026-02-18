@@ -1,0 +1,26 @@
+@echo off
+accelerate launch train.py ^
+    --seed=123 ^
+    --experience_name="FontDiffuser_Finetune" ^
+    --data_root="data_examples" ^
+    --output_dir="outputs/FontDiffuser_Finetune" ^
+    --report_to="tensorboard" ^
+    --resolution=96 ^
+    --style_image_size=96 ^
+    --content_image_size=96 ^
+    --content_encoder_downsample_size=3 ^
+    --channel_attn=True ^
+    --content_start_channel=64 ^
+    --style_start_channel=64 ^
+    --train_batch_size=8 ^
+    --perceptual_coefficient=0.01 ^
+    --offset_coefficient=0.5 ^
+    --max_train_steps=5000 ^
+    --ckpt_interval=500 ^
+    --gradient_accumulation_steps=1 ^
+    --log_interval=50 ^
+    --learning_rate=5e-5 ^
+    --lr_scheduler="linear" ^
+    --lr_warmup_steps=500 ^
+    --drop_prob=0.1 ^
+    --mixed_precision="no"

@@ -1,0 +1,211 @@
+# Initially taken from GitHub's Python gitignore file
+phase_1_ckpt/
+run_sh/
+ckpt/
+ckt/
+evaluate/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# tests and logs
+tests/fixtures/cached_*_text.txt
+logs/
+lightning_logs/
+lang_code_data/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# vscode
+.vs
+.vscode
+
+# Pycharm
+.idea
+
+# TF code
+tensorflow_code
+
+# Models
+proc_data
+
+# examples
+runs
+/runs_old
+/wandb
+/examples/runs
+/examples/**/*.args
+/examples/rag/sweep
+
+# data
+/data
+serialization_dir
+
+# emacs
+*.*~
+debug.env
+
+# vim
+.*.swp
+
+# ctags
+tags
+
+# pre-commit
+.pre-commit*
+
+# .lock
+*.lock
+
+# DS_Store (MacOS)
+.DS_Store
+
+# RL pipelines may produce mp4 outputs
+*.mp4
+
+# dependencies
+/transformers
+
+# ruff
+.ruff_cache
+
+# wandb
+wandb
+
+# === Custom project-specific ignore ===
+
+# 保留空資料夾但忽略內容
+outputs_generater_character_list/*
+!outputs_generater_character_list/.gitkeep
+
+outputs/*
+!outputs/.gitkeep
+
+# 完全排除 ttf 資料夾（不保留）
+ttf/*
+!ttf/NotoSansTC-Thin.ttf
+
+# split_train_test：只保留特定檔案與資料夾
+split_train_test/*
+!split_train_test/colab_split_data.py
+!split_train_test/Noto_Sans_TC_JPG/
+
+# 忽略整個 train 資料夾（包含資料夾本身與所有內容）
+data_examples/train/
+
+# 忽略 sampling 資料夾內的所有內容
+data_examples/sampling/*
+
+# 但保留 sampling 資料夾本身（需要裡面有個空檔案）
+!data_examples/sampling/.gitkeep
+
+
+
