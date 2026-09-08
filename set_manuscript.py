@@ -1,13 +1,13 @@
-handwriting_path = r"./0_written_newline.txt" 
-target_file_path = r"./3_notosanschar_newline.txt"
-output_file_path = r"./test"
+handwriting_path = r"./115-1_emba_handwriting.txt" 
+target_file_path = r"./2_big5_newline.txt"
+output_file_path = r"./115-1_emba_training_content.txt"
 
 with open(handwriting_path, "r", encoding="utf-8") as file:
     text = file.read()
 with open(target_file_path, "r", encoding="utf-8") as file:
     target_content = "".join(file.read().split())
 
-clean_text = "".join(text.lstrip('\ufeff')  .split()) # delete all elements which is not char
+clean_text = "".join(text.lstrip('\ufeff').split()) # delete all elements which is not char
 unique_characters = set(clean_text)
 
 set_target_file = set(target_content)
