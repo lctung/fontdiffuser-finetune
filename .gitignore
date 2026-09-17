@@ -191,7 +191,7 @@ outputs/*
 
 # 完全排除 ttf 資料夾（不保留）
 ttf/*
-!ttf/NotoSansTC-Thin.ttf
+!ttf/*.ttf
 
 # split_train_test：只保留特定檔案與資料夾
 split_train_test/*
