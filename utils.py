@@ -83,13 +83,29 @@ def normalize_mean_std(image):
 
 
 def is_char_in_font(font_path, char):
-    TTFont_font = TTFont(font_path)
-    cmap = TTFont_font['cmap']
-    for subtable in cmap.tables:
-        if ord(char) in subtable.cmap:
-            return True
-    return False
+    # 若傳入多個字型路徑（list），只要任一字型有該字即返回 True
+    if isinstance(font_path, (list, tuple)):
+        return any(is_char_in_font(fp, char) for fp in font_path)
 
+    try:
+        font = TTFont(font_path)
+        for table in font['cmap'].tables:
+            if table.isUnicode():
+                if ord(char) in table.cmap:
+                    return True
+        return False
+    except Exception:
+        return False
+
+def get_font_for_char(font_paths, char):
+    """從多個字型中找出支援該字元的字型路徑"""
+    if isinstance(font_paths, str):
+        return font_paths
+    for fp in font_paths:
+        if is_char_in_font(fp, char):
+            return fp
+    # 若都找不到，預設回傳第一個兜底
+    return font_paths[0]
 
 def load_ttf(ttf_path, fsize=128):
     pygame.init()
