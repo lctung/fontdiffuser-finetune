@@ -18,10 +18,10 @@ from src import (FontDiffuserDPMPipeline,
 from utils import (ttf2im,
                    load_ttf,
                    is_char_in_font,
+                   get_font_for_char,
                    save_args_to_yaml,
                    save_single_image,
                    save_image_with_content_style)
-
 
 def arg_parse():
     from configs.fontdiffuser import get_parser
@@ -40,7 +40,17 @@ def arg_parse():
     parser.add_argument("--save_image_dir", type=str, default=None,
                         help="The saving directory.")
     parser.add_argument("--device", type=str, default="cuda:0")
-    parser.add_argument("--ttf_path", type=str, default="ttf/NotoSansTC-Thin.ttf")
+    parser.add_argument(
+        "--ttf_path", 
+        nargs="+", 
+        default=[
+            "ttf/NotoSansTC-Thin.ttf",
+            "ttf/TW-Sung-98_1.ttf",
+            "ttf/TW-Sung-Ext-B-98_1.ttf",
+            "ttf/TW-Sung-Plus-98_1.ttf"
+        ],
+        help="Path(s) to TTF font files (e.g. CNS fonts for BMP, Ext-B, and Plus)."
+    )
     args = parser.parse_args()
     style_image_size = args.style_image_size
     content_image_size = args.content_image_size
@@ -50,14 +60,20 @@ def arg_parse():
     return args
 
 
+
 def image_process(args, content_character=None):
     if not args.demo:
         # Read content image and style image
         if args.character_input:
             assert content_character is not None, "The content_character should not be None."
-            if not is_char_in_font(font_path=args.ttf_path, char=content_character):
-                return None, None
-            font = load_ttf(ttf_path=args.ttf_path)
+            
+            # 從多個字型中挑出包含此字元的字型檔
+            target_font_path = get_font_for_char(args.ttf_path, content_character)
+            if not is_char_in_font(font_path=target_font_path, char=content_character):
+                print(f"Warning: '{content_character}' 找不到對應的字型檔！")
+                return None, None, None
+                
+            font = load_ttf(ttf_path=target_font_path)
             content_image = ttf2im(font=font, char=content_character)
             content_image_pil = content_image.copy()
         else:
@@ -68,9 +84,14 @@ def image_process(args, content_character=None):
         assert style_image is not None, "The style image should not be None."
         if args.character_input:
             assert content_character is not None, "The content_character should not be None."
-            if not is_char_in_font(font_path=args.ttf_path, char=content_character):
-                return None, None
-            font = load_ttf(ttf_path=args.ttf_path)
+            
+            # 從多個字型中挑出包含此字元的字型檔
+            target_font_path = get_font_for_char(args.ttf_path, content_character)
+            if not is_char_in_font(font_path=target_font_path, char=content_character):
+                print(f"Warning: '{content_character}' 找不到對應的字型檔！")
+                return None, None, None
+                
+            font = load_ttf(ttf_path=target_font_path)
             content_image = ttf2im(font=font, char=content_character)
         else:
             assert content_image is not None, "The content image should not be None."
@@ -78,15 +99,16 @@ def image_process(args, content_character=None):
         
     ## Dataset transform
     content_inference_transforms = transforms.Compose(
-        [transforms.Resize(args.content_image_size, \
-                            interpolation=transforms.InterpolationMode.BILINEAR),
-            transforms.ToTensor(),
-            transforms.Normalize([0.5], [0.5])])
-    style_inference_transforms = transforms.Compose(
-        [transforms.Resize(args.style_image_size, \
+        [transforms.Resize(args.content_image_size, 
                            interpolation=transforms.InterpolationMode.BILINEAR),
          transforms.ToTensor(),
          transforms.Normalize([0.5], [0.5])])
+    style_inference_transforms = transforms.Compose(
+        [transforms.Resize(args.style_image_size, 
+                           interpolation=transforms.InterpolationMode.BILINEAR),
+         transforms.ToTensor(),
+         transforms.Normalize([0.5], [0.5])])
+         
     content_image = content_inference_transforms(content_image)[None, :]
     style_image = style_inference_transforms(style_image)[None, :]
 
